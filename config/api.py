@@ -1,6 +1,5 @@
 """Root Django Ninja API - every app router is mounted here under /api/."""
 
-from django.conf import settings
 from ninja import NinjaAPI
 from ninja.errors import HttpError
 
@@ -20,7 +19,10 @@ api = NinjaAPI(
     version="1.0.0",
     description="REST API for the Hospital ERP - patients, staff, appointments, "
     "EMR, pharmacy, wards, laboratory and billing.",
-    docs_url="/docs" if settings.DEBUG else None,
+    # Served in every environment: the schema it renders is already public at
+    # /api/openapi.json, so hiding the UI bought nothing. Gate this behind auth
+    # (and set openapi_url=None) if the API surface ever needs to be private.
+    docs_url="/docs",
 )
 
 
